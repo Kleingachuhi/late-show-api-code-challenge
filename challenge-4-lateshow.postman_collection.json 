@@ -1,0 +1,271 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+    "name": "Late Show API Challenge",
+    "description": "Complete test collection for Late Show API including authentication, episodes, guests and appearances management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "0. Authentication",
+      "description": "User registration and login endpoints",
+      "item": [
+        {
+          "name": "Register New User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"testpass123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5555/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5555",
+              "path": ["register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login & Get Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"testpass123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5555/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5555",
+              "path": ["login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "1. Public Endpoints",
+      "description": "Endpoints available without authentication",
+      "item": [
+        {
+          "name": "Get All Episodes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5555/episodes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5555",
+              "path": ["episodes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Episode by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5555/episodes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5555",
+              "path": ["episodes", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Guests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5555/guests",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5555",
+              "path": ["guests"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Protected Endpoints",
+      "description": "Requires valid JWT token from login",
+      "item": [
+        {
+          "name": "Create New Appearance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rating\": 5,\n    \"guest_id\": 1,\n    \"episode_id\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5555/appearances",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5555",
+              "path": ["appearances"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Episode",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5555/episodes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5555",
+              "path": ["episodes", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5555/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5555",
+              "path": ["users"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5555"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "description": "Obtain from Login endpoint"
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set token from login response",
+          "pm.test(\"Status code is 200\", function() {",
+          "    pm.response.to.have.status(200);",
+          "});",
+          "",
+          "// For login endpoint only",
+          "if (pm.request.url.toString().includes(\"login\")) {",
+          "    var jsonData = pm.response.json();",
+          "    pm.collectionVariables.set(\"token\", jsonData.token);",
+          "}"
+        ]
+      }
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}

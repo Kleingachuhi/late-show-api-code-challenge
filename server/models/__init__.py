@@ -1,7 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-
-db = SQLAlchemy()
-bcrypt = Bcrypt()
-
+from server.extensions import db
 from .user import User
+from .guest import Guest
+from .episode import Episode
+from .appearance import Appearance
+
+__all__ = ['User', 'Guest', 'Episode', 'Appearance']
